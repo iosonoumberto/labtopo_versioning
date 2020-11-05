@@ -1,0 +1,11 @@
+---
+url: 'git@github.com:iosonoumberto/topology_vmx_gre_switching.git'
+devices:
+    - ip: '10.102.162.117'
+      name: 'r1'
+      usr: 'root'
+      pass: 'Embe1mpls'
+    - ip: '10.102.161.4'
+      name: 'r2'
+      usr: 'root'
+      pass: 'Embe1mpls'
