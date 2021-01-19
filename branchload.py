@@ -53,10 +53,14 @@ for x in settings['devices']:
     print("JUNOS:\t\tconnecting to " + x['name'] + ".")
     dev = Device(host=x['ip'], user=x['usr'], password=x['pass'])
     dev.open(gather_facts=False)
+    oldip=dev.rpc.get_interface_information(interface_name='fxp0', terse=True).xpath(".//ifa-local/text()")[0].replace('\n','')
+    newip=x['ip']+"/"+oldip.split('/')[1]
+    fxp0="rename groups re0 interfaces fxp0 unit 0 fmaily inet address " + oldip + " to address " + newip
     cfg = Config(dev)
     cfile = "tmpwdc/"+x['name']+".txt"
     try:
         cfg.load(path=cfile, format='text', overwrite=True)
+        cfg.load(fxp0, format='set')
     except ConfigLoadError as err:
         print(err)
     if cfg.commit_check():
@@ -69,3 +73,4 @@ for x in settings['devices']:
     else:
         print ("JUNOS:\t\terror, commit check failed")
     dev.close()
+
