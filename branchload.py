@@ -53,10 +53,12 @@ for x in settings['devices']:
     print("JUNOS:\t\tconnecting to " + x['name'] + ".")
     dev = Device(host=x['ip'], user=x['usr'], password=x['pass'])
     dev.open(gather_facts=False)
-    print(dev.facts)
-    oldip=dev.rpc.get_interface_information(interface_name='fxp0', terse=True).xpath(".//ifa-local/text()")[0].replace('\n','')
+    try:
+        oldip=dev.rpc.get_interface_information(interface_name='fxp0', terse=True).xpath(".//ifa-local/text()")[0].replace('\n','')
+    except:
+        oldip=dev.rpc.get_interface_information(interface_name='em0', terse=True).xpath(".//ifa-local/text()")[0].replace('\n','')
     if "VMX" in dev.facts['RE0']['model']:
-        fxp0="delete groups re0 interfaces fxp0\nset groups re0 interfaces fxp0 unit 0 family inet address " + oldip
+        fxp0="delete groups member0 interfaces fxp0\nset groups member0 interfaces fxp0 unit 0 family inet address " + oldip
     if "VSRX" in dev.facts['RE0']['model']:
         fxp0="delete groups member0 interfaces fxp0\nset groups member0 interfaces fxp0 unit 0 family inet address " + oldip
     if "QFX" in dev.facts['RE0']['model']:
