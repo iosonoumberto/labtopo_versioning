@@ -58,11 +58,11 @@ for x in settings['devices']:
     except:
         oldip=dev.rpc.get_interface_information(interface_name='em0', terse=True).xpath(".//ifa-local/text()")[0].replace('\n','')
     if "VMX" in dev.facts['RE0']['model']:
-        fxp0="delete groups member0 interfaces fxp0\nset groups member0 interfaces fxp0 unit 0 family inet address " + oldip
+        fxp0="delete apply-groups\nset apply-groups global\nset interfaces fxp0 unit 0 family inet address " + oldip + "\nset system host-name " + x['name']
     if "VSRX" in dev.facts['RE0']['model']:
-        fxp0="delete groups member0 interfaces fxp0\nset groups member0 interfaces fxp0 unit 0 family inet address " + oldip
+        fxp0="delete apply-groups\nset apply-groups global\nset interfaces fxp0 unit 0 family inet address " + oldip + "\nset system host-name " + x['name']
     if "QFX" in dev.facts['RE0']['model']:
-        fxp0="delete groups member0 interfaces em0\nset groups member0 interfaces em0 unit 0 family inet address " + oldip
+        fxp0="delete apply-groups\nset apply-groups global\nset interfaces em0 unit 0 family inet address " + oldip + "\nset system host-name " + x['name']
     cfg = Config(dev)
     cfile = "tmpwdc/"+x['name']+".txt"
     try:
