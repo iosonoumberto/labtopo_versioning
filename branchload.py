@@ -10,6 +10,20 @@ import git
 import shutil
 import time
 
+stc = """set groups global routing-options static route 172.16.0.0/12 next-hop GW
+set groups global routing-options static route 172.16.0.0/12 retain
+set groups global routing-options static route 172.16.0.0/12 no-readvertise
+set groups global routing-options static route 192.168.0.0/16 next-hop GW
+set groups global routing-options static route 192.168.0.0/16 retain
+set groups global routing-options static route 192.168.0.0/16 no-readvertise
+set groups global routing-options static route 10.0.0.0/8 next-hop GW
+set groups global routing-options static route 10.0.0.0/8 retain
+set groups global routing-options static route 10.0.0.0/8 no-readvertise
+set groups global routing-options static route 66.129.0.0/16 next-hop GW
+set groups global routing-options static route 66.129.0.0/16 retain
+set groups global routing-options static route 66.129.0.0/16 no-readvertise"""
+
+
 nb=False
 
 print("HOST:\t\tpreparing environment.")
@@ -54,6 +68,7 @@ for x in settings['devices']:
     dev = Device(host=x['ip'], user=x['usr'], password=x['pass'])
     dev.open(gather_facts=False)
     gw=dev.rpc.get_config().xpath(".//groups[name='member0']/system/backup-router/address/text()")[0].replace('\n','')
+    stc.replace('GW',gw)
     print(gw)
     try:
         oldip=dev.rpc.get_interface_information(interface_name='fxp0', terse=True).xpath(".//ifa-local/text()")[0].replace('\n','')
@@ -73,6 +88,11 @@ for x in settings['devices']:
         print(err)
     try:
         cfg.load(fxp0, format='set')
+    except ConfigLoadError as err:
+        print(err)
+    try:
+        cfg.load("delete groups member0 routing-options static", format='set')
+        cfg.load(stc, format='set')
     except ConfigLoadError as err:
         print(err)
     if cfg.commit_check():
