@@ -68,7 +68,7 @@ for x in settings['devices']:
     dev = Device(host=x['ip'], user=x['usr'], password=x['pass'])
     dev.open(gather_facts=False)
     gw=dev.rpc.get_config().xpath(".//groups[name='member0']/system/backup-router/address/text()")[0].replace('\n','')
-    stc.replace('GW',gw)
+    stc=stc.replace('GW',gw)
     print(gw)
     try:
         oldip=dev.rpc.get_interface_information(interface_name='fxp0', terse=True).xpath(".//ifa-local/text()")[0].replace('\n','')
