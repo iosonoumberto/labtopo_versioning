@@ -91,7 +91,7 @@ for x in settings['devices']:
     except ConfigLoadError as err:
         print(err)
     try:
-        cfg.load("delete groups member0 routing-options static", format='set')
+        cfg.load("delete groups global routing-options static", format='set')
         cfg.load(stc, format='set')
     except ConfigLoadError as err:
         print(err)
