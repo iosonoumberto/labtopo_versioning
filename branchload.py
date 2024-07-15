@@ -65,7 +65,7 @@ if len(missing)>0:
 
 for x in settings['devices']:
     print("JUNOS:\t\tconnecting to " + x['name'] + ".")
-    dev = Device(host=x['ip'], user=x['usr'], password=x['pass'])
+    dev = Device(host=x['ip'], user=settings['usr'], password=settings['pass'])
     dev.open(gather_facts=False)
     gw=dev.rpc.get_config().xpath(".//groups[name='member0']/system/backup-router/address/text()")[0].replace('\n','')
     stc=stc.replace('GW',gw)
