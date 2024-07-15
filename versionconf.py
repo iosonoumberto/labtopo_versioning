@@ -43,7 +43,7 @@ except Exception as err:
 
 for x in settings['devices']:
     print("JUNOS:\t\tconnecting to " + x['name'] + ".")
-    dev = Device(host=x['ip'], user=x['usr'], password=x['pass'])
+    dev = Device(host=x['ip'], user=settings['usr'], password=settings['pass'])
     dev.open(gather_facts=False)
     data = dev.rpc.get_config(options={'format':'set'})
     f = open("./tmpwdc/"+x['name']+'.set', 'w')
