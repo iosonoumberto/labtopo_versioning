@@ -87,13 +87,13 @@ for x in settings['devices']:
     except ConfigLoadError as err:
         print(err)
     try:
-        cfg.load(fxp0, format='set')
-        print("MGMT LOADED " + fxp0)
+        cfg.load("delete groups global routing-options static", format='set')
+        cfg.load(stc, format='set')
     except ConfigLoadError as err:
         print(err)
     try:
-        cfg.load("delete groups global routing-options static", format='set')
-        cfg.load(stc, format='set')
+        cfg.load(fxp0, format='set')
+        print("MGMT LOADED " + fxp0)
     except ConfigLoadError as err:
         print(err)
     if cfg.commit_check():
