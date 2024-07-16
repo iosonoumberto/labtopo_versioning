@@ -88,6 +88,7 @@ for x in settings['devices']:
         print(err)
     try:
         cfg.load(fxp0, format='set')
+        print("MGMT LOADED " + fxp0)
     except ConfigLoadError as err:
         print(err)
     try:
